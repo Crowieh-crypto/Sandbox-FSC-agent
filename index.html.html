@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Комисия за финансов надзор (КФН) - Симулация</title>
+    <link rel="stylesheet" href="agent-ui.css">
+</head>
+<body>
+
+    <header style="background: #0f2c59; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+        <div id="fsc-logo" style="font-weight: bold; font-size: 20px;">КФН / FSC Bulgaria</div>
+        <nav id="lang-nav">
+            <button id="btn-lang-bg" style="font-weight: bold; padding: 5px 10px;" onclick="switchLanguage('bg')">БГ</button>
+            <button id="btn-lang-en" style="padding: 5px 10px;" onclick="switchLanguage('en')">EN</button>
+        </nav>
+    </header>
+
+    <main style="padding: 40px; max-width: 800px; margin: 0 auto; font-family: sans-serif;">
+        
+        <h1 id="main-heading">Добре дошли в Комисията за финансов надзор</h1>
+        <p id="main-subtext">Регулиране и надзор на небанковия финансов сектор в България.</p>
+
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ccc;">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+                <h3 id="card-reg-title">Електронни регистри</h3>
+                <p id="card-reg-desc">Търсене на застрахователни компании, пенсионни фондове и инвестиционни посредници.</p>
+                <button id="btn-open-registers" onclick="alert('Opening Registers Database...')">Отвори Регистрите</button>
+            </div>
+
+            <div style="border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+                <h3 id="card-complaint-title">Подаване на Жалба</h3>
+                <p id="card-complaint-desc">Защита на потребителите: Подайте онлайн жалба срещу поднадзорно лице.</p>
+                <button id="btn-submit-complaint" onclick="alert('Opening Complaint Portal...')">Подай Жалба</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="ai-agent-widget">
+        <div id="ai-widget-header">
+            <span id="ai-widget-title">КФН Гласов /Текстов Асистент</span>
+        </div>
+        <div id="ai-chat-history">
+            <div class="bot-msg" id="ai-initial-greeting">Здравейте! Аз мога да ви помогна да се ориентирате в сайта. Напишете или кажете какво търсите.</div>
+        </div>
+        <div id="ai-widget-input-area">
+            <input type="text" id="ai-user-input" placeholder="Напишете заявка тук..." onkeypress="if(event.key === 'Enter') triggerAgentAction()">
+            <button id="ai-send-btn" onclick="triggerAgentAction()">➔</button>
+        </div>
+    </div>
+
+    <div id="ai-aria-live" aria-live="polite" style="position: absolute; width: 1px; height: 1px; overflow: hidden;"></div>
+
+    <script type="module" src="agent-core.js"></script>
+    <script>
+        const translations = {
+            bg: {
+                heading: "Добре дошли в Комисията за финансов надзор",
+                subtext: "Регулиране и надзор на небанковия финансов сектор в България.",
+                regTitle: "Електронни регистри",
+                regDesc: "Търсене на застрахователни компании, пенсионни фондове и инвестиционни посредници.",
+                regBtn: "Отвори Регистрите",
+                compTitle: "Подаване на Жалба",
+                compDesc: "Защита на потребителите: Подайте онлайн жалба срещу поднадзорно лице.",
+                compBtn: "Подай Жалба",
+                widgetTitle: "КФН Гласов / Текстов Асистент",
+                greeting: "Здравейте! Аз мога да ви помогна да се ориентирате в сайта. Напишете или кажете какво търсите.",
+                placeholder: "Напишете заявка тук..."
+            },
+            en: {
+                heading: "Welcome to the Financial Supervision Commission",
+                subtext: "Regulation and supervision of the non-banking financial sector in Bulgaria.",
+                regTitle: "Electronic Registers",
+                regDesc: "Search for insurance companies, pension funds, and investment intermediaries.",
+                regBtn: "Open Registers",
+                compTitle: "Submit a Complaint",
+                compDesc: "Consumer Protection: Submit an online complaint against a supervised entity.",
+                compBtn: "Submit Complaint",
+                widgetTitle: "FSC Voice / Text Assistant",
+                greeting: "Hello! I can help you navigate the portal. Type or speak what you are looking for.",
+                placeholder: "Type your request here..."
+            }
+        };
+
+        window.switchLanguage = function(lang) {
+            document.documentElement.setAttribute('lang', lang);
+            document.getElementById('main-heading').innerText = translations[lang].heading;
+            document.getElementById('main-subtext').innerText = translations[lang].subtext;
+            document.getElementById('card-reg-title').innerText = translations[lang].regTitle;
+            document.getElementById('card-reg-desc').innerText = translations[lang].regDesc;
+            document.getElementById('btn-open-registers').innerText = translations[lang].regBtn;
+            document.getElementById('card-complaint-title').innerText = translations[lang].compTitle;
+            document.getElementById('card-complaint-desc').innerText = translations[lang].compDesc;
+            document.getElementById('btn-submit-complaint').innerText = translations[lang].compBtn;
+            document.getElementById('ai-widget-title').innerText = translations[lang].widgetTitle;
+            document.getElementById('ai-initial-greeting').innerText = translations[lang].greeting;
+            document.getElementById('ai-user-input').placeholder = translations[lang].placeholder;
+
+            document.getElementById('btn-lang-bg').style.fontWeight = lang === 'bg' ? 'bold' : 'normal';
+            document.getElementById('btn-lang-en').style.fontWeight = lang === 'en' ? 'bold' : 'normal';
+
+            if(window.fscAgentInstance) {
+                window.fscAgentInstance.syncLanguage();
+            }
+        }
+    </script>
+</body>
+</html>
